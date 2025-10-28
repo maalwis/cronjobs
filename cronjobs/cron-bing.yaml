@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: curl-bing
+  namespace: default
+spec:
+  schedule: "*/10 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: curl
+            image: curlimages/curl:latest
+            args: ["-s", "-w", "\nHTTP Status: %{http_code}\n", "https://www.bing.com"]
+          restartPolicy: OnFailure
