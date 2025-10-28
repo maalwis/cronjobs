@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: curl-google
+  namespace: default
+spec:
+  # Runs every 5 minutes (you can adjust this cron schedule)
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: curl
+            image: curlimages/curl:latest
+            args:
+              - -s
+              - -w
+              - "\nHTTP Status: %{http_code}\n"
+              - https://www.google.com
+          restartPolicy: OnFailure
